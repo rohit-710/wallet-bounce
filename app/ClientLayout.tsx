@@ -8,10 +8,11 @@ import React from "react";
 
 // Initialize Reown AppKit
 const solanaAdapter = new SolanaAdapter({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   wallets: [
-    new PhantomWalletAdapter({ network: 'devnet' }),
+    new PhantomWalletAdapter(),
     new SolflareWalletAdapter()
-  ] as any // Type assertion to bypass the type check temporarily
+  ] as any
 });
 
 export const modal = createAppKit({

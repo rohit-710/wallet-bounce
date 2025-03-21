@@ -1,0 +1,43 @@
+/* Pixel Borders */
+.pixel-borders {
+  position: relative;
+}
+
+.pixel-borders::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #000;
+  pointer-events: none;
+}
+
+.pixel-box--primary {
+  background: #fff;
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+.pixel-box--primary::before {
+  border-color: #000;
+}
+
+/* Hover effect for interactive elements */
+.pixel-box--primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 #000;
+}
+
+/* Active state for buttons */
+.pixel-box--primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+/* Disabled state */
+.pixel-box--primary:disabled {
+  transform: none;
+  box-shadow: 4px 4px 0 0 #000;
+  opacity: 0.5;
+} 

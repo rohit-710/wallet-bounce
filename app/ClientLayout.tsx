@@ -8,11 +8,6 @@ import React from "react";
 
 // Initialize Reown AppKit
 const solanaAdapter = new SolanaAdapter({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  wallets: [
-    new PhantomWalletAdapter(),
-    new SolflareWalletAdapter()
-  ] as any
 });
 
 export const modal = createAppKit({

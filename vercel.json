@@ -7,9 +7,5 @@
       "src": "package.json",
       "use": "@vercel/next"
     }
-  ],
-  "env": {
-    "NEXT_PUBLIC_REOWN_PROJECT_ID": "@next_public_reown_project_id",
-    "TREASURY_PRIVATE_KEY": "@treasury_private_key"
-  }
+  ]
 } 

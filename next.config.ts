@@ -23,7 +23,6 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
-  transpilePackages: ['pino-pretty', 'pino'],
   experimental: {
     serverComponentsExternalPackages: ['pino-pretty', 'pino']
   }

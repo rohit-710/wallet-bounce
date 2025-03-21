@@ -14,8 +14,8 @@ export const modal = createAppKit({
   metadata: {
     name: "Wallet Bounce",
     description: "A simple ball bouncing game powered by Solana and Reown AppKit",
-    url: "https://breakwallet.app",
-    icons: ["https://breakwallet.app/icon.png"]
+    url: "https://wallet-bounce.vercel.app/",
+    icons: ["https://avatars.githubusercontent.com/u/179229932"]
   },
   themeMode: "light",
   networks: [solanaDevnet],

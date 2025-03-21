@@ -1,17 +1,23 @@
+import type { NextConfig } from 'next';
+import type { Configuration as WebpackConfig } from 'webpack';
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  webpack: (config, { isServer }) => {
+const nextConfig: NextConfig = {
+  webpack: (config: WebpackConfig, { isServer }: { isServer: boolean }) => {
     if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        crypto: false,
-        stream: false,
-        path: false,
-        os: false,
-        'pino-pretty': false
+      config.resolve = {
+        ...config.resolve,
+        fallback: {
+          ...config.resolve?.fallback,
+          fs: false,
+          net: false,
+          tls: false,
+          crypto: false,
+          stream: false,
+          path: false,
+          os: false,
+          'pino-pretty': false
+        }
       };
     }
     return config;

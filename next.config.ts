@@ -16,13 +16,17 @@ const nextConfig: NextConfig = {
           stream: false,
           path: false,
           os: false,
-          'pino-pretty': require.resolve('pino-pretty')
+          'pino-pretty': false,
+          'pino': false
         }
       };
     }
     return config;
   },
-  transpilePackages: ['pino-pretty']
+  transpilePackages: ['pino-pretty', 'pino'],
+  experimental: {
+    serverComponentsExternalPackages: ['pino-pretty', 'pino']
+  }
 };
 
 export default nextConfig;

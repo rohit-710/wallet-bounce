@@ -7,5 +7,10 @@
       "src": "package.json",
       "use": "@vercel/next"
     }
-  ]
+  ],
+  "functions": {
+    "app/api/claim-reward/route.ts": {
+      "maxDuration": 60
+    }
+  }
 } 

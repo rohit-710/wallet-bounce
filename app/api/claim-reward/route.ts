@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { Connection, PublicKey, Transaction, SystemProgram, Keypair } from '@solana/web3.js';
 import bs58 from 'bs58';
 
+// Use Edge Runtime for longer timeout
+export const runtime = 'edge';
+
 // Connect to Solana devnet
 const connection = new Connection('https://api.devnet.solana.com');
 
@@ -42,15 +45,13 @@ export async function POST(request: Request) {
     // Sign transaction with treasury keypair
     transaction.sign(treasuryKeypair);
 
-    // Send transaction
+    // Send transaction without waiting for confirmation
     const signature = await connection.sendRawTransaction(transaction.serialize());
-    
-    // Wait for confirmation
-    await connection.confirmTransaction(signature);
 
     return NextResponse.json({
       success: true,
       signature,
+      message: 'Transaction sent successfully. Please check status separately.'
     });
   } catch (error) {
     console.error('Error processing reward claim:', error);

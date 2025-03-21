@@ -75,7 +75,7 @@ const Game = () => {
     });
   };
 
-  const handleClaimReward = async () => {
+  const claimReward = async () => {
     if (!walletProvider || !address || !connection) {
       console.error('Wallet not connected');
       return;
@@ -83,8 +83,10 @@ const Game = () => {
 
     setIsClaiming(true);
     setClaimError(null);
+    setLastTransactionSignature(null);
 
     try {
+      // Step 1: Send transaction
       const response = await fetch('/api/claim-reward', {
         method: 'POST',
         headers: {
@@ -97,26 +99,48 @@ const Game = () => {
 
       const data = await response.json();
 
-      if (data.success) {
-        setIsClaiming(false);
-        setLastTransactionSignature(data.signature);
-
-        // Update leaderboard to mark reward as claimed
-        setLeaderboard(prevLeaderboard =>
-          prevLeaderboard.map(entry =>
-            entry.address === address
-              ? { ...entry, hasClaimedReward: true }
-              : entry
-          )
-        );
-      } else {
-        console.error('Error claiming reward:', data.error || 'Failed to claim reward');
-        setClaimError('Failed to claim reward. Please try again later.');
-        setIsClaiming(false);
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to claim reward');
       }
+
+      // Step 2: Poll for transaction status
+      const signature = data.signature;
+      let isConfirmed = false;
+      let attempts = 0;
+      const maxAttempts = 10; // Maximum number of attempts to check status
+
+      while (!isConfirmed && attempts < maxAttempts) {
+        const statusResponse = await fetch(`/api/check-transaction?signature=${signature}`);
+        const statusData = await statusResponse.json();
+
+        if (statusData.isConfirmed) {
+          isConfirmed = true;
+          setLastTransactionSignature(signature);
+          break;
+        }
+
+        // Wait for 2 seconds before next attempt
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        attempts++;
+      }
+
+      if (!isConfirmed) {
+        throw new Error('Transaction confirmation timeout. Please check your wallet later.');
+      }
+
+      // Update leaderboard to mark reward as claimed
+      setLeaderboard(prevLeaderboard =>
+        prevLeaderboard.map(entry =>
+          entry.address === address
+            ? { ...entry, hasClaimedReward: true }
+            : entry
+        )
+      );
+
     } catch (error) {
       console.error('Error claiming reward:', error);
-      setClaimError('Failed to claim reward. Please try again later.');
+      setClaimError(error instanceof Error ? error.message : 'Failed to claim reward');
+    } finally {
       setIsClaiming(false);
     }
   };
@@ -341,7 +365,7 @@ const Game = () => {
                                   </span>
                                 ) : (
                                   <button
-                                    onClick={handleClaimReward}
+                                    onClick={claimReward}
                                     disabled={isClaiming}
                                     className="px-3 py-1 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm rounded-full hover:from-indigo-600 hover:to-purple-600 disabled:opacity-50 transition-all duration-200 flex items-center space-x-1 shadow-lg shadow-indigo-200 hover:shadow-indigo-300"
                                   >

@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
 import { useAppKitAccount, useAppKitProvider } from '@reown/appkit/react';
 import { useAppKitConnection } from '@reown/appkit-adapter-solana/react';
-import { PublicKey, LAMPORTS_PER_SOL, Transaction, SystemProgram, Connection } from '@solana/web3.js';
 
 interface LeaderboardEntry {
   address: string;

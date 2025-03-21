@@ -5,8 +5,17 @@ import bs58 from 'bs58';
 // Use Edge Runtime for longer timeout
 export const runtime = 'edge';
 
-// Connect to Solana devnet
-const connection = new Connection('https://api.devnet.solana.com');
+// Get Helius API key from environment variable
+const HELIUS_API_KEY = process.env.HELIUS_API_KEY;
+if (!HELIUS_API_KEY) {
+  throw new Error('HELIUS_API_KEY environment variable is not set');
+}
+
+// Connect to Solana devnet using Helius RPC
+const connection = new Connection(`https://devnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`, {
+  commitment: 'confirmed',
+  confirmTransactionInitialTimeout: 60000,
+});
 
 // Get treasury private key from environment variable
 const TREASURY_PRIVATE_KEY = process.env.TREASURY_PRIVATE_KEY;

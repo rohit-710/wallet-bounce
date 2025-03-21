@@ -1,8 +1,17 @@
 import { NextResponse } from 'next/server';
 import { Connection } from '@solana/web3.js';
 
-// Connect to Solana devnet
-const connection = new Connection('https://api.devnet.solana.com');
+// Get Helius API key from environment variable
+const HELIUS_API_KEY = process.env.HELIUS_API_KEY;
+if (!HELIUS_API_KEY) {
+  throw new Error('HELIUS_API_KEY environment variable is not set');
+}
+
+// Connect to Solana devnet using Helius RPC
+const connection = new Connection(`https://devnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`, {
+  commitment: 'confirmed',
+  confirmTransactionInitialTimeout: 60000,
+});
 
 export async function GET(request: Request) {
   try {
